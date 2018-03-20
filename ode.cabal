@@ -1,0 +1,36 @@
+name:                ode
+version:             0.1.0.0
+synopsis:            Calculate approximate (numeric) solutions for ODE initial value problems
+-- description:
+homepage:            https://github.com/tkemps/ode
+license:             BSD3
+license-file:        LICENSE
+author:              Torsten Kemps-Benedix,
+maintainer:          torsten.kemps-benedix@sks-group.eu,
+copyright:           2018 Torsten Kemps-Benedix,
+category:            Web
+build-type:          Simple
+cabal-version:       >=1.10
+extra-source-files:  README.md
+
+library
+  hs-source-dirs:      src
+  default-language:    Haskell2010
+  build-depends:       base >= 4.7 && < 5, vector, diagrams, diagrams-lib, diagrams-core, diagrams-svg, Chart, Chart-diagrams, transformers, repa, ghc-prim, text, criterion
+  ghc-options:         -Odph -fno-liberate-case -funfolding-use-threshold1000 -funfolding-keeness-factor1000 -fllvm -optlo-O3 -rtsopts
+  exposed-modules:     Data.Array.Repa.Util, Data.Vector.Util,
+                       Numeric.ODE, Numeric.ODE.RKCK, Numeric.ODE.RKQS,
+                       Numeric.ODE.Exceptions, Numeric.ODE.ODEInt, Numeric.ODE.RK4,
+                       Numeric.ODE.Stepper, Numeric.ODE.Util
+
+benchmark bench-ODE
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      src, bench
+  other-modules:       Data.Array.Repa.Util, Data.Vector.Util,
+                       Numeric.ODE, Numeric.ODE.RKCK, Numeric.ODE.RKQS,
+                       Numeric.ODE.Exceptions, Numeric.ODE.ODEInt, Numeric.ODE.RK4,
+                       Numeric.ODE.Stepper, Numeric.ODE.Util
+  default-language:    Haskell2010
+  main-is:             BenchODE.hs
+  build-depends:       base >= 4.7 && < 5, vector, text, transformers, repa, criterion
+  ghc-options:         -Odph -threaded -fno-liberate-case -funfolding-use-threshold1000 -funfolding-keeness-factor1000 -fllvm -optlo-O3 -rtsopts
