@@ -1,3 +1,3 @@
 # Numeric solutions for Ordinary Differential Equations
 
-Executables, benchmarks and library to calculate numerical solutions for ODE initial value problems.
+Haskell library and benchmarks (aka examples) to calculate numerical solutions for ODE initial value problems.
