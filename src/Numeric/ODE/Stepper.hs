@@ -71,7 +71,7 @@ class SimpleStepper s where
            Double,
            Double) -- ^ advanced x1 ∈ R and , advanced vector y1 ∈ R, actually used step size h > 0, proposed next step size hnext > 0
 
-instance Stepper s ⇒ SimpleStepper s where
+instance {-# OVERLAPPABLE #-} Stepper s ⇒ SimpleStepper s where
   simpleStepperName s = T.concat ["Simplified ", stepperName s]
   simpleStep st y dydx x h eps f =
     let (xnext, ynext, hdid, _, _, _) = step st y dydx x h eps y f

@@ -55,7 +55,7 @@ rk41 !y !y' !x !h f = {-# SCC "rk41" #-}
 
 data RK4 = RK4
 
-instance {-# OVERLAPPABLE #-} SimpleStepper RK4 where
+instance SimpleStepper RK4 where
   simpleStepperName _ = "4th order Runge-Kutta"
   simpleStep _ y y' x h _ f =
     let y1 = rk4 y y' x h f
