@@ -63,6 +63,6 @@ bs1 y dydx x htry eps yscal f = undefined
 data BS = BS
 
 instance Stepper BS where
-  name _ = "Bulisch-Stoer"
+  stepperName _ = "Bulisch-Stoer"
   step _ y dydx x h eps yscal f = bs y dydx x h eps yscal f
   step1 _ y dydx x h eps yscal f = bs1 y dydx x h eps yscal f
