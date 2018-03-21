@@ -117,7 +117,7 @@ dc6 = c6-0.25
 data RKCK = RKCK
 
 instance Stepper RKCK where
-  name _ = "Cash–Karp"
+  stepperName _ = "Cash–Karp"
   step _ y dydx x h eps yscal f = let (y1, yerr) = rkck y dydx x h f
                                   in (x+h, y1, h, h, yerr,
                                       maxScaledError yerr yscal eps)

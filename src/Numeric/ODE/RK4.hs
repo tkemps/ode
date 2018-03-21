@@ -18,17 +18,17 @@
 -- The RK4 method is a fourth-order method, meaning that the local truncation error is on the order of \(O(h^5)\), while the total accumulated error is on the order of \(O(h^4)\).
 module Numeric.ODE.RK4 (RK4(..), rk4, rk41) where
 
-import Data.Array.Repa (Array(..), D, (+^), Source, DIM1)
+import Data.Array.Repa ((+^), Source)
 import Data.Array.Repa.Util
 import Numeric.ODE.Stepper
 
 rk4 ∷ ∀ r1 r2 r3 . (Source r3 Double, Source r2 Double, Source r1 Double) ⇒
-       Array r1 DIM1 Double -- ^ starting point y ∈ ℝⁿ
-     → Array r2 DIM1 Double -- ^ derivative dy/dx = f(x,y) ∈ ℝⁿ at starting point (x, y)
+       Vec r1 -- ^ starting point y ∈ ℝⁿ
+     → Vec r2 -- ^ derivative dy/dx = f(x,y) ∈ ℝⁿ at starting point (x, y)
      → Double -- ^ starting point x ∈ ℝ
      → Double -- ^ stepsize h ∈ ℝ
-     → (∀ r . (Source r Double) ⇒ Double → Array r DIM1 Double → Array r3 DIM1 Double) -- ^ derivative function f(x, y) = dy/dx ∈ ℝⁿ
-     -> Array D DIM1 Double -- ^ advanced solution vector y1 ∈ ℝⁿ
+     → (∀ r . (Source r Double) ⇒ Double → Vec r → Vec r3) -- ^ derivative function f(x, y) = dy/dx ∈ ℝⁿ
+     -> VecD -- ^ advanced solution vector y1 ∈ ℝⁿ
 {-# INLINE rk4 #-}
 rk4 y y' x h f = {-# SCC "rk4" #-}
   let yt1 = y +^ (0.5*h)*.y'
@@ -55,12 +55,11 @@ rk41 !y !y' !x !h f = {-# SCC "rk41" #-}
 
 data RK4 = RK4
 
--- |The simple fourth order Runge-Kutta method does not provide an error estimate. Therefore it is not usable for adaptive control methods. The implementation of 'step' resp. 'step1' returns 'undefined' as the second component.
-instance Stepper RK4 where
-  name _ = "4th order Runge-Kutta"
-  step _ y y' x h _ _ f =
+instance {-# OVERLAPPABLE #-} SimpleStepper RK4 where
+  simpleStepperName _ = "4th order Runge-Kutta"
+  simpleStep _ y y' x h _ f =
     let y1 = rk4 y y' x h f
-    in (x+h, y1, h, h, undefined, undefined)
-  step1 _ y y' x h _ _ f =
+    in (x+h, y1, h)
+  simpleStep1 _ y y' x h _ f =
     let y1 = rk41 y y' x h f
-    in (x+h, y1, h, h, undefined, undefined)
+    in (x+h, y1, h)

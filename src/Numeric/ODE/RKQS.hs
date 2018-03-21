@@ -84,13 +84,13 @@ rkqs1 st y dydx x htry eps yscal f = loop htry
 data RKQS = ∀ s . (Stepper s) ⇒ RKQS s
 
 instance Stepper RKQS where
-  name st = T.concat ["Quality controlled stepper based on ", name st]
+  stepperName st = T.concat ["Quality controlled stepper based on ", stepperName st]
   step (RKQS st) y dydx x h eps yscal f = rkqs st y dydx x h eps yscal f
   step1 (RKQS st) y dydx x h eps yscal f = rkqs1 st y dydx x h eps yscal f
 
 data RKQSCK = RKQSCK
 
 instance Stepper RKQSCK where
-  name _ = "Quality controlled Cash–Karp"
+  stepperName _ = "Quality controlled Cash–Karp"
   step _ y dydx x h eps yscal f = rkqs RKCK y dydx x h eps yscal f
   step1 _ y dydx x h eps yscal f = rkqs1 RKCK y dydx x h eps yscal f
